@@ -8,6 +8,10 @@ export class DataForm {
     #hourToElement;
     #errorMessageElem;
     #inputElements;
+    #selectSityElement;
+    #minDate;
+    #maxDate;
+    #cities;
     #dateFrom;
     #dateTo;
     #hourFrom;
@@ -21,10 +25,13 @@ export class DataForm {
        this.#hourFromElement = document.getElementById(params.idHourFrom);
        this.#hourToElement = document.getElementById(params.idHourTo);
        this.#errorMessageElem = document.getElementById(params.idErrorMessage);
-    //    this.#dateFromElement.min = params.minDate;
+       this.#selectSityElement = document.querySelector(params.sitySelector);
+       this.#minDate = params.minMaxDates.minDate;
+       this.#maxDate = params.minMaxDates.maxDate;
+       this.#cities = params.cities;
        this.onChangeDate();
        this.onChangeHours();
-
+       this.updateHtml();
     }
     addHandler(processFun) {
         this.#formElement.addEventListener('submit', (event) => {
@@ -36,12 +43,7 @@ export class DataForm {
             }, {});
             processFun(data);
 
-
         })
-    }
-    doubleNumber(number) {
-      
-        console.log(number * 2) ;
     }
     onChangeDate() {
         this.#dateFromElement.addEventListener('change', this.dateHandler.bind(this));
@@ -91,8 +93,19 @@ export class DataForm {
                 }
             }
         }
-        }
-        
+    }
+    updateHtml() {
+        // the list of cities
+        this.#selectSityElement.innerHTML += 
+          this.#cities.map(cur => {
+            return `<option value="${cur}">${cur}</option>`
+          }).join('');
+          // min/max dates for dateFrom and dateTo
+          this.#dateFromElement.min = this.#minDate;
+          this.#dateFromElement.max = this.#maxDate;
+          this.#dateToElement.min = this.#minDate;
+          this.#dateToElement.max = this.#maxDate;
+    }
 }
 
  
